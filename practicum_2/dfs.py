@@ -11,11 +11,9 @@ def visit(node: Any):
 
 
 def dfs_recursive(G: nx.Graph, node: Any, visited: dict[Any]) -> None:
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
-
+    
     pass
+    
 
 
 def dfs_iterative(G: nx.Graph, node: Any) -> None:
