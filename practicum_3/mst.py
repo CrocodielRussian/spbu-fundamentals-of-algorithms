@@ -12,10 +12,6 @@ def prim_mst(G: nx.Graph, start_node="0") -> set[tuple[Any, Any]]:
     rest_set = set(G.nodes())  # set of nodes not yet included into MST
     mst_edges = set()  # set of edges constituting MST
 
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
-
     return mst_edges
 
 
