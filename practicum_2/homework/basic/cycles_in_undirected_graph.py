@@ -1,3 +1,5 @@
+import os
+
 import networkx as nx
 import queue
 from typing import Any
@@ -33,7 +35,14 @@ if __name__ == "__main__":
     g = nx.Graph()
     for filename in TEST_GRAPH_FILES:
         # Load the graph
+<<<<<<< HEAD
         G = nx.read_edgelist("practicum_2/homework/basic/" + filename, create_using=nx.Graph)
         plot_graph(G)        
        # Output whether it has cycles
+=======
+        G = nx.read_edgelist(
+            os.path.join("practicum_2", "homework", filename), create_using=nx.Graph
+        )
+        # Output whether it has cycles
+>>>>>>> b567133b1f1679751f3681ee2b532c0f5acfa386
         print(f"Graph {filename} has cycles: {has_cycles(G)}")
