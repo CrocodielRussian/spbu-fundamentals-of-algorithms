@@ -41,7 +41,7 @@ def solve_via_simulated_annealing(
     cur_colors = initial_colors
     best_colors = initial_colors.copy()
     
-    t = 100
+    t = 1000
     temperature = 1000
 
     
@@ -64,7 +64,7 @@ def solve_via_simulated_annealing(
                     cur_colors = best_colors
                     loss_history[i] = n_conflicts_best
 
-        temperature = t * np.exp(-3.1 * pow(i, 1 / n_max_colors))
+        temperature = t * np.exp(-4.1 * pow(i, 1 / n_max_colors))
 
         if temperature < 0.0001:
             break
