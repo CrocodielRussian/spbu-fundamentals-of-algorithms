@@ -1,6 +1,7 @@
 import numpy as np
 from numpy.typing import NDArray
 import networkx as nx
+from math import pow
 
 from src.plotting import plot_graph, plot_loss_history
 
@@ -28,6 +29,7 @@ def tweak(colors, n_max_colors):
     random_i = np.random.randint(low=0, high=n_nodes)
     random_color = np.random.randint(low=0, high=n_max_colors)
     new_colors[random_i] = random_color
+    
     return new_colors
 
 
@@ -39,7 +41,9 @@ def solve_via_simulated_annealing(
     cur_colors = initial_colors
     best_colors = initial_colors.copy()
     
+    t = 100
     temperature = 1000
+
     
     for i in range(1, n_iters):
         loss_history[i] = number_of_conflicts(G, cur_colors)
@@ -54,13 +58,13 @@ def solve_via_simulated_annealing(
         else:
             if temperature > 0.0001:
                 r = np.random.rand()
-                p = np.exp(abs(diff_conflicts) / temperature)
+                h = 1 / (1 + np.exp(abs(diff_conflicts) / temperature))
                 
-                if p >= r:
+                if h >= r:
                     cur_colors = best_colors
                     loss_history[i] = n_conflicts_best
 
-        temperature *= temperature / (diff_conflicts ** 2 + temperature ** 2) ** (n_max_colors + 1)/2
+        temperature = t * np.exp(-3.1 * pow(i, 1 / n_max_colors))
 
         if temperature < 0.0001:
             break
