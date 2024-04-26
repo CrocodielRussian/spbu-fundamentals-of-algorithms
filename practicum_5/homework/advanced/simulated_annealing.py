@@ -22,14 +22,48 @@ def set_colors(G, colors):
         G.nodes[n]["color"] = color
 
 
+def tweak(colors, n_max_colors):
+    new_colors = colors.copy()
+    n_nodes = len(new_colors)
+    random_i = np.random.randint(low=0, high=n_nodes)
+    random_color = np.random.randint(low=0, high=n_max_colors)
+    new_colors[random_i] = random_color
+    return new_colors
+
+
 def solve_via_simulated_annealing(
     G: nx.Graph, n_max_colors: int, initial_colors: NDArrayInt, n_iters: int
 ):
     loss_history = np.zeros((n_iters,), dtype=np.int_)
+    
+    cur_colors = initial_colors
+    best_colors = initial_colors.copy()
+    
+    temperature = 1000
+    
+    for i in range(1, n_iters):
+        loss_history[i] = number_of_conflicts(G, cur_colors)
+        
+        best_colors = tweak(cur_colors, n_max_colors)
+        n_conflicts_best = number_of_conflicts(G, best_colors)
+        
 
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
+        diff_conflicts = loss_history[i] - n_conflicts_best
+        if diff_conflicts > 0:
+            cur_colors = best_colors
+        else:
+            if temperature > 0.0001:
+                r = np.random.rand()
+                p = np.exp(abs(diff_conflicts) / temperature)
+                
+                if p >= r:
+                    cur_colors = best_colors
+                    loss_history[i] = n_conflicts_best
+
+        temperature *= temperature / (diff_conflicts ** 2 + temperature ** 2) ** (n_max_colors + 1)/2
+
+        if temperature < 0.0001:
+            break
 
     return loss_history
 
