@@ -36,13 +36,14 @@ def tweak(colors, n_max_colors):
 def solve_via_simulated_annealing(
     G: nx.Graph, n_max_colors: int, initial_colors: NDArrayInt, n_iters: int
 ):
+    global probability
     loss_history = np.zeros((n_iters,), dtype=np.int_)
     
+
     cur_colors = initial_colors
     best_colors = initial_colors.copy()
     
-    t = 1000
-    temperature = 1000
+    temperature = 500
 
     
     for i in range(1, n_iters):
@@ -55,19 +56,19 @@ def solve_via_simulated_annealing(
         diff_conflicts = loss_history[i] - n_conflicts_best
         if diff_conflicts > 0:
             cur_colors = best_colors
+            loss_history[i] = n_conflicts_best
         else:
-            if temperature > 0.0001:
+            if temperature > 0.0000001:
                 r = np.random.rand()
-                h = 1 / (1 + np.exp(abs(diff_conflicts) / temperature))
-                
+                h = 1 / (1 + np.exp(abs(diff_conflicts)/i) )
                 if h >= r:
                     cur_colors = best_colors
                     loss_history[i] = n_conflicts_best
 
-        temperature = t * np.exp(-4.1 * pow(i, 1 / n_max_colors))
+        temperature *= np.exp(-0.9 * pow(i, 1 / n_max_colors))
 
-        if temperature < 0.0001:
-            break
+        if temperature < 0.0000001:
+            temperature = 0
 
     return loss_history
 
@@ -85,4 +86,5 @@ if __name__ == "__main__":
     loss_history = solve_via_simulated_annealing(
         G, n_max_colors, initial_colors, n_max_iters
     )
+
     plot_loss_history(loss_history)
