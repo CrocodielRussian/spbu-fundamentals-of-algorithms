@@ -3,7 +3,8 @@ from numpy.typing import NDArray
 import networkx as nx
 from math import pow
 
-from src.plotting import plot_graph, plot_loss_history
+from src.plotting import plot_graph
+#from src.plotting import plot_loss_history
 
 
 NDArrayInt = NDArray[np.int_]
@@ -87,4 +88,4 @@ if __name__ == "__main__":
         G, n_max_colors, initial_colors, n_max_iters
     )
 
-    plot_loss_history(loss_history)
+   # plot_loss_history(loss_history)
