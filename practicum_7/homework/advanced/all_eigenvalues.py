@@ -66,7 +66,7 @@ def sign(x):
 def get_all_eigenvalues(A: NDArrayFloat) -> NDArrayFloat:
     A_hess = hessenberg_reduction(A)
     
-    n_iters = 5
+    n_iters = 1
     for _ in range(n_iters):
         Q, R = qr(A_hess)
         W = R @ Q
@@ -87,7 +87,7 @@ def run_test_cases(
     for i, matrix_filename in enumerate(matrix_filenames):
         print(f"Processing matrix {i+1} out of {len(matrix_filenames)}")
         A = scipy.io.mmread(os.path.join(path_to_matrices, matrix_filename)).todense().A
-        
+
         perf = performance_by_matrix[matrix_filename]
         t1 = time.time()
         eigvals = get_all_eigenvalues(A)
