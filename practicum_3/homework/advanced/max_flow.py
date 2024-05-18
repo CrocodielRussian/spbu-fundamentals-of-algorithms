@@ -7,6 +7,8 @@ from src.plotting import plot_graph
 from copy import deepcopy
 
 def dfs(G: nx.Graph, s: Any, parent: dict[Any], t: Any, c: Any) -> bool:
+    t = str(t)
+    s = str(s)
     visited = {n: 0 for n in G}
     q = queue.LifoQueue()
 
@@ -16,15 +18,18 @@ def dfs(G: nx.Graph, s: Any, parent: dict[Any], t: Any, c: Any) -> bool:
         if v == t:
             return True
         visited[v] = True
+
         for neigh in G.neighbors(v):
             if not visited[neigh] and G[v][neigh]['weight'] >= c:
                 parent[neigh] = v        
-                q.put(neigh)        
+                q.put(neigh)
     return False
     
 
 
 def max_flow(G: nx.Graph, s: Any, t: Any) -> int:
+    s = str(s)
+    t = str(t)
     value: int = 0
     
     c = 100 # Some threshold value for weight of edge 
@@ -44,7 +49,6 @@ def max_flow(G: nx.Graph, s: Any, t: Any) -> int:
                 min_flow = min(min_flow, G[parents[v]][v]['weight'])
                 v = parents[v]
             value += min_flow
-            print(min_flow)
             v = t
             while parents[v] != -1:
                 G[v][parents[v]]['weight'] += min_flow
@@ -66,10 +70,8 @@ if __name__ == "__main__":
         edges.append((v, u, 0))
     G_copy.add_weighted_edges_from(edges)
 
-    visited = {n: 0 for n in G}
+    visited = {int(n): 0 for n in G.nodes}
     
-    val = max_flow(G_copy, '0', '5')
-
-    plot_graph(G)
+    val = max_flow(G_copy, s = 0, t = 5)
 
     print(f"Maximum flow is {val}. Should be 23")
