@@ -90,5 +90,4 @@ if __name__ == "__main__":
     loss_history = solve_via_simulated_annealing(
         G, n_max_colors, initial_colors, n_max_iters
     )
-    print(loss_history)
    # plot_loss_history(loss_history)
