@@ -44,10 +44,10 @@ def solve_via_simulated_annealing(
     cur_colors = initial_colors
     best_colors = initial_colors.copy()
     
-    temperature = 500
+    temperature = 1000
 
     
-    for i in range(1, n_iters):
+    for i in range(0, n_iters):            
         loss_history[i] = number_of_conflicts(G, cur_colors)
         
         best_colors = tweak(cur_colors, n_max_colors)
@@ -61,7 +61,10 @@ def solve_via_simulated_annealing(
         else:
             if temperature > 0.0000001:
                 r = np.random.rand()
-                h = 1 / (1 + np.exp(abs(diff_conflicts)/i) )
+                if i == 0:
+                    h = 1 / (1 + np.exp(abs(diff_conflicts)/(i+1)) )
+                else:
+                    h = 1 / (1 + np.exp(abs(diff_conflicts)/i) )
                 if h >= r:
                     cur_colors = best_colors
                     loss_history[i] = n_conflicts_best
@@ -87,5 +90,5 @@ if __name__ == "__main__":
     loss_history = solve_via_simulated_annealing(
         G, n_max_colors, initial_colors, n_max_iters
     )
-
+    print(loss_history)
    # plot_loss_history(loss_history)
